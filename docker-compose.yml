@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: petstore
+    ports:
+      - "3306:3306"
+    networks:
+      - petstore-network
+
+  app:
+    build: .
+    container_name: petstore-app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/petstore?allowMultiQueries=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8081:8081"
+    networks:
+      - petstore-network
+
+networks:
+  petstore-network:
+    driver: bridge
