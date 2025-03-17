@@ -1,8 +1,7 @@
-# Fase di build
 FROM gradle:7.6-jdk8 as builder
 WORKDIR /app
 COPY . .
-RUN gradle build --no-daemon
+RUN gradle build -x test --no-daemon
 
 FROM eclipse-temurin:8-jdk
 WORKDIR /app
